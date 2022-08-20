@@ -63,6 +63,16 @@ const jwtCallback: CallbacksOptions['jwt'] = async ({
 	return await refreshAccessToken(token as ExtendedToken)
 }
 
+const sessionCallback: CallbacksOptions['session'] = async ({
+	session,
+	token
+}) => {
+	session.accessToken = (token as ExtendedToken).accessToken
+	session.error = (token as ExtendedToken).error
+
+	return session
+}
+
 export default NextAuth({
 	providers: [
 		SpotifyProvider({
@@ -80,6 +90,7 @@ export default NextAuth({
 		signIn: '/login'
 	},
 	callbacks: {
-		jwt: jwtCallback
+		jwt: jwtCallback,
+		session: sessionCallback
 	}
 })
