@@ -30,3 +30,24 @@ export interface IPlaylistContext {
 		updatedObj: Partial<PlaylistContextState>
 	) => void
 }
+
+export interface SongContextState {
+	selectedSongId?: string
+	selectedSong: any | null
+	isPlaying: boolean
+	volume: number
+	deviceId: string | null
+}
+
+export interface ISongContext {
+	songContextState: SongContextState
+}
+
+export enum SongReducerActionType {
+	SetDevice = 'SetDevice'
+}
+
+export type SongReducerAction = {
+	type: SongReducerActionType.SetDevice
+	payload: Pick<SongContextState, 'deviceId' | 'volume'>
+}
