@@ -1,4 +1,8 @@
 import Image from 'next/image'
+import { usePlaylistContext } from '../contexts/PlaylistContext'
+import { useSongContext } from '../contexts/SongContext'
+import useSpotify from '../hooks/useSpotify'
+import { SongReducerActionType } from '../types'
 import { convertDuration } from '../utils/durationConverter'
 
 interface Props {
@@ -7,8 +11,43 @@ interface Props {
 }
 
 const Song = ({ item: { track }, itemIndex }: Props) => {
+	const spotifyApi = useSpotify()
+
+	const {
+		songContextState: { deviceId },
+		dispatchSongAction
+	} = useSongContext()
+
+	const {
+		playlistContextState: { selectedPlaylist }
+	} = usePlaylistContext()
+
+	const playSong = async () => {
+		if (!deviceId) return
+
+		dispatchSongAction({
+			type: SongReducerActionType.SetCurrentPlayingSong,
+			payload: {
+				selectedSongId: track?.id,
+				selectedSong: track,
+				isPlaying: true
+			}
+		})
+
+		await spotifyApi.play({
+			device_id: deviceId,
+			context_uri: selectedPlaylist?.uri,
+			offset: {
+				uri: track?.uri as string
+			}
+		})
+	}
+
 	return (
-		<div className='grid grid-cols-2 text-gray-500 px-5 py-4 hover:bg-gray-900 rounded-lg cursor-pointer'>
+		<div
+			className='grid grid-cols-2 text-gray-500 px-5 py-4 hover:bg-gray-900 rounded-lg cursor-pointer'
+			onClick={playSong}
+		>
 			<div className='flex items-center space-x-4'>
 				<p>{itemIndex + 1}</p>
 				<div>
