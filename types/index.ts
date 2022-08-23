@@ -48,7 +48,8 @@ export interface ISongContext {
 export enum SongReducerActionType {
 	SetDevice = 'SetDevice',
 	ToggleIsPlaying = 'ToggleIsPlaying',
-	SetCurrentPlayingSong = 'SetCurrentPlayingSong'
+	SetCurrentPlayingSong = 'SetCurrentPlayingSong',
+	SetVolume = 'SetVolume'
 }
 
 export type SongReducerAction =
@@ -66,4 +67,8 @@ export type SongReducerAction =
 				SongContextState,
 				'selectedSongId' | 'selectedSong' | 'isPlaying'
 			>
+	  }
+	| {
+			type: SongReducerActionType.SetVolume
+			payload: number
 	  }

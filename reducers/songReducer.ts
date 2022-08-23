@@ -31,6 +31,12 @@ export const songReducer = (
 				isPlaying
 			}
 
+		case SongReducerActionType.SetVolume:
+			return {
+				...state,
+				volume: payload
+			}
+
 		default:
 			return state
 	}
